@@ -85,12 +85,10 @@ async function main() {
         if (!result.ok) return { ok: false };
 
         let rewardTokens = 1;
-        if (result.previousHighScore !== undefined) {
-            const prevTen = Math.floor(result.previousHighScore / 10);
-            const newTen = Math.floor(req.score / 10);
-            if (newTen > prevTen) {
-                rewardTokens += (newTen - prevTen) * 10;
-            }
+        const prevTen = Math.floor((result.previousHighScore ?? 0) / 10);
+        const newTen = Math.floor(req.score / 10);
+        if (newTen > prevTen) {
+            rewardTokens += (newTen - prevTen) * 10;
         }
 
         const newAchievements: Achievement[] = [];
