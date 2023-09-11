@@ -10,6 +10,7 @@ import { Executor } from "./Executor";
 import { Scheduler } from "./Scheduler";
 import { Achievement } from "./achievements";
 import { config } from './consts';
+import cors from '@fastify/cors';
 
 const { tokenMinter, achievementCollections } = config;
 
@@ -38,7 +39,10 @@ async function main() {
 
     const fastify = Fastify({
         logger: true
-    })
+    });
+    fastify.register(cors, {
+        origin: 'https://krigga.github.io',
+    });
 
     fastify.post('/played', async function handler (request, reply) {
         const req = playedRequest.parse(request.body);
