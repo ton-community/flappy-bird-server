@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryColumn } from "typeorm"
+import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm"
+import { Purchase } from "./Purchase"
 
 @Entity()
 export class User {
@@ -25,5 +26,8 @@ export class User {
         nullable: false,
     })
     plays: number
+
+    @OneToMany(() => Purchase, purchase => purchase.user)
+    purchases: Purchase[]
 
 }
