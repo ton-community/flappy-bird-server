@@ -1,5 +1,7 @@
 # flappy-bird-server
 
+Also see [ARCHITECTURE.md](/ARCHITECTURE.md)
+
 ## Setting up your own
 
 1. Get a server and point a domain to it
