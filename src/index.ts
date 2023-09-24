@@ -168,7 +168,7 @@ async function main() {
         logger: true
     });
     fastify.register(cors, {
-        origin: 'https://krigga.github.io',
+        origin: 'https://ton-community.github.io',
     });
 
     fastify.post('/played', async function handler (request, reply) {
