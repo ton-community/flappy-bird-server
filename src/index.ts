@@ -174,6 +174,13 @@ async function main() {
     fastify.post('/played', async function handler (request, reply) {
         const req = playedRequest.parse(request.body);
 
+        let reqWallet: Address | undefined = undefined;
+        if (req.wallet !== undefined) {
+            try {
+                reqWallet = Address.parse(req.wallet);
+            } catch (e) {}
+        }
+
         const telegramData = processTelegramData(req.tg_data, process.env.BOT_TOKEN!);
 
         if (!telegramData.ok) return { ok: false };
@@ -184,12 +191,11 @@ async function main() {
         const result: { ok: false } | { ok: true, plays: number, previousHighScore?: number, wallet: string } = await AppDataSource.transaction(async (tx) => {
             const user = await tx.findOneBy(User, { id: userID });
             if (user === null) {
-                if (req.wallet === undefined) return { ok: false };
-                const addr = Address.parse(req.wallet);
+                if (reqWallet === undefined) return { ok: false };
                 const newUser = new User();
                 newUser.highScore = req.score;
                 newUser.id = userID;
-                newUser.wallet = addr.toString({
+                newUser.wallet = reqWallet.toString({
                     urlSafe: true,
                     bounceable: false,
                     testOnly: false,
@@ -199,6 +205,13 @@ async function main() {
                 return { ok: true, plays: newUser.plays, wallet: newUser.wallet };
             } else {
                 user.plays++;
+                if (reqWallet !== undefined) {
+                    user.wallet = reqWallet.toString({
+                        urlSafe: true,
+                        bounceable: false,
+                        testOnly: false,
+                    });
+                }
                 let previousHighScore: number | undefined = undefined;
                 if (req.score > user.highScore) {
                     previousHighScore = user.highScore;
