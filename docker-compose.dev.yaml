@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+  app:
+    container_name: flappy-bird-server-dev
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      CORS_ENABLED: ${CORS_ENABLED}
+      CORS_ORIGIN: ${CORS_ORIGIN}
+      NGROK_ENABLED: ${NGROK_ENABLED}
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+      NETWORK: ${NETWORK}
+      MNEMONIC: ${MNEMONIC}
+      PINATA_API_KEY: ${PINATA_API_KEY}
+      PINATA_SECRET: ${PINATA_SECRET}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      JETTON_ADDRESS: ${JETTON_ADDRESS}
+      FIRST_TIME_SBT_COLLECTION_ADDRESS: ${FIRST_TIME_SBT_COLLECTION_ADDRESS}
+      FIVE_TIMES_SBT_COLLECTION_ADDRESS: ${FIVE_TIMES_SBT_COLLECTION_ADDRESS}
+    volumes:
+      - ./src:/usr/src/app/src
+    depends_on:
+      - postgres
+    command: ts-node-dev --respawn src/index.ts
+  postgres:
+    container_name: postgres-db-dev
+    image: postgres
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data
+volumes:
+  postgres_data_dev:

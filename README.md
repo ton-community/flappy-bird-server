@@ -22,3 +22,10 @@ Also see [ARCHITECTURE.md](/ARCHITECTURE.md)
 1. Setup [CORS](https://github.com/ton-community/flappy-bird-server/blob/f1cf55fb70dce521d5153b013c3ecc87c9d4e24c/src/index.ts#L171) if necessary
 1. Serve static content in any way you like
 1. Setup the telegram web app and you're done!
+
+
+docker-compose -f ./composes/docker-compose.dev.yaml up --build
+
+docker-compose -f ./composes/docker-compose.prod.yaml up --build
+
+npm run typeorm:generate-migration --name=initial
