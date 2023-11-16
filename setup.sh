@@ -117,25 +117,32 @@ initialize_env_file() {
     local DB_PASSWORD=$(openssl rand -hex 16)
     local NETWORK="testnet"
     local MNEMONIC=$(ts-node ./scripts/generate-mnemonic.ts)
+    local CORS_ENABLED="false"
+    local CORS_ORIGIN="*"
+    local NGROK_ENABLED="false"
+    local NGROK_AUTHTOKEN=""
+    local NGROK_DOMAIN=""
 
     # Reading user input with validation
     DB_USER=$(read_input_and_validate "Please enter your DB_USER or press Enter to use the generated [$DB_USER]:" "$DB_USER" validate_non_empty)
     DB_PASSWORD=$(read_input_and_validate "Please enter your DB_PASSWORD or press Enter to use the generated [hidden]:" "$DB_PASSWORD" validate_non_empty)
 
     if ask_for_confirmation "Do you want to enable CORS?"; then
-        local CORS_ENABLED="true"
-        local CORS_ORIGIN=$(read_input_and_validate "Please enter your CORS_ORIGIN (e.g. http://localhost:3000) or press Enter to use the default [*]:" "*" validate_non_empty)
+        CORS_ENABLED="true"
+        CORS_ORIGIN=$(read_input_and_validate "Please enter your CORS_ORIGIN (e.g. http://localhost:3000) or press Enter to use the default [*]:" "*" validate_non_empty)
     else
-        local CORS_ENABLED="false"
-        local CORS_ORIGIN="*"
+        CORS_ENABLED="false"
+        CORS_ORIGIN="*"
     fi
 
     if ask_for_confirmation "Do you want to enable ngrok?"; then
-        local NGROK_ENABLED="true"
-        local NGROK_AUTHTOKEN=$(read_input_and_validate "Please enter your NGROK_AUTHTOKEN (e.g. 0A1B2C3D4E5F6G7H8I9J0K1L2M3_4N5O6P7Q8R9S0T1U2V3W4):" "" validate_non_empty)
+        NGROK_ENABLED="true"
+        NGROK_AUTHTOKEN=$(read_input_and_validate "Please enter your NGROK_AUTHTOKEN (e.g. 0A1B2C3D4E5F6G7H8I9J0K1L2M3_4N5O6P7Q8R9S0T1U2V3W4):" "" validate_non_empty)
+        NGROK_DOMAIN=$(read_input_and_validate "Please enter your NGROK_DOMAIN (this requires registering in the https://dashboard.ngrok.com/cloud-edge/domains):" "" validate_non_empty)
     else
-        local NGROK_ENABLED="false"
-        local NGROK_AUTHTOKEN=""
+        NGROK_ENABLED="false"
+        NGROK_AUTHTOKEN=""
+        NGROK_DOMAIN=""
     fi
 
     NETWORK=$(read_input_and_validate "Please enter your NETWORK (mainnet or testnet) or press Enter to use the default [$NETWORK]:" "$NETWORK" validate_network)
@@ -158,6 +165,7 @@ CORS_ENABLED=$CORS_ENABLED
 CORS_ORIGIN=$CORS_ORIGIN
 NGROK_ENABLED=$NGROK_ENABLED
 NGROK_AUTHTOKEN=$NGROK_AUTHTOKEN
+NGROK_DOMAIN=$NGROK_DOMAIN
 
 # Network Configuration
 NETWORK=$NETWORK
