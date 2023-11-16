@@ -1,20 +1,23 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
+import { config } from "./config";
 import { User } from "./entity/User"
 import { Item } from "./entity/Item"
 import { Purchase } from "./entity/Purchase"
 import { Global } from "./entity/Global"
+import { resolve } from 'path';
 
 export const AppDataSource = new DataSource({
     type: "postgres",
-    host: process.env.DB_HOST!,
-    port: Number(process.env.DB_PORT!),
-    username: process.env.DB_USER!,
-    password: process.env.DB_PASSWORD!,
-    database: process.env.DB_NAME!,
+    host: config.DB_HOST,
+    port: config.DB_PORT,
+    username: config.DB_USER,
+    password: config.DB_PASSWORD,
+    database: config.DB_NAME,
     synchronize: false,
     logging: true,
     entities: [User, Item, Purchase, Global],
-    migrations: [],
+    migrations: [resolve(__dirname, 'migrations', '*.{ts,js}')],
+    migrationsRun: true,
     subscribers: [],
 })

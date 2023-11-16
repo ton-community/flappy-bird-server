@@ -9,22 +9,25 @@
       "typescript": "4.5.2"
    },
    "dependencies": {
-      "@fastify/cors": "^8.3.0",
-      "@orbs-network/ton-access": "^2.3.3",
-      "@ton-community/gamefi-sdk": "^0.0.1",
-      "@ton/core": "^0.52.0",
-      "@ton/crypto": "^3.2.0",
-      "@ton/ton": "^13.5.1",
-      "dotenv": "^16.3.1",
-      "fastify": "^4.22.2",
-      "pg": "^8.4.0",
-      "reflect-metadata": "^0.1.13",
-      "ton-crypto": "^3.2.0",
+      "@fastify/cors": "8.4.1",
+      "@ngrok/ngrok": "^0.9.0",
+      "@orbs-network/ton-access": "2.3.3",
+      "@ton-community/gamefi-sdk": "0.0.1",
+      "@ton/core": "0.53.0",
+      "@ton/crypto": "3.2.0",
+      "@ton/ton": "13.9.0",
+      "dotenv": "16.3.1",
+      "fastify": "4.22.2",
+      "pg": "8.11.3",
+      "reflect-metadata": "0.1.13",
+      "ton-crypto": "3.2.0",
       "typeorm": "0.3.17",
-      "zod": "^3.22.2"
+      "zod": "3.22.4"
    },
    "scripts": {
       "start": "ts-node src/index.ts",
-      "typeorm": "typeorm-ts-node-commonjs"
+      "typeorm": "ts-node ./node_modules/typeorm/cli",
+      "typeorm:run-migrations": "npm run typeorm migration:run -- -d ./src/data-source.ts",
+      "typeorm:generate-migration": "npm run typeorm -- -d ./src/data-source.ts migration:generate ./src/migrations/$npm_config_name"
    }
 }

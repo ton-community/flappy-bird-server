@@ -1,26 +1,24 @@
-import 'dotenv/config';
-import { AppDataSource } from "./data-source";
-import { User } from "./entity/User";
 import Fastify from 'fastify';
-import { z } from 'zod';
-import { Address, Cell, TonClient4, Transaction } from '@ton/ton';
-import { GameFiSDK, createHighloadV2 } from '@ton-community/gamefi-sdk';
-import { processTelegramData } from "./telegram";
-import { Executor } from "./Executor";
-import { Scheduler } from "./Scheduler";
-import { Achievement } from "./achievements";
-import { config } from './consts';
 import cors from '@fastify/cors';
-import { Purchase } from './entity/Purchase';
-import { Item } from './entity/Item';
-import { In } from 'typeorm';
+import { Achievement } from "./achievements";
+import { Address, Cell, TonClient4, Transaction } from '@ton/ton';
+import { AppDataSource } from "./data-source";
+import { Executor } from "./Executor";
+import { GameFiSDK, createHighloadV2 } from '@ton-community/gamefi-sdk';
 import { Global } from './entity/Global';
+import { In } from 'typeorm';
+import { Item } from './entity/Item';
+import { Purchase } from './entity/Purchase';
+import { Scheduler } from "./Scheduler";
+import { User } from "./entity/User";
+import { config } from './config';
 import { getHttpV4Endpoint } from '@orbs-network/ton-access';
+import { processTelegramData } from "./telegram";
+import { z } from 'zod';
+import ngrok from '@ngrok/ngrok';
 
-const NETWORK = 'testnet';
 const PROCESS_INTERVAL = 10000;
-
-const { tokenMinter, achievementCollections } = config;
+const { NETWORK, TOKEN_MINTER, ACHIEVEMENT_COLLECTION } = config;
 
 const playedRequest = z.object({
     tg_data: z.string(),
@@ -150,14 +148,14 @@ async function processTxs(address: Address, client: TonClient4, acceptFrom: Addr
 async function main() {
     await AppDataSource.initialize();
 
-    const highload = await createHighloadV2(process.env.MNEMONIC!);
+    const highload = await createHighloadV2(config.MNEMONIC!);
 
     const sdk = await GameFiSDK.create({
         api: NETWORK,
         wallet: highload,
         storage: {
-            pinataApiKey: process.env.PINATA_API!,
-            pinataSecretKey: process.env.PINATA_SECRET!,
+            pinataApiKey: config.PINATA_API_KEY!,
+            pinataSecretKey: config.PINATA_SECRET!,
         },
     });
 
@@ -167,9 +165,12 @@ async function main() {
     const fastify = Fastify({
         logger: true
     });
-    fastify.register(cors, {
-        origin: 'https://ton-community.github.io',
-    });
+
+    if (config.CORS_ENABLED) {
+        fastify.register(cors, {
+            origin: config.CORS_ORIGIN!,
+        });
+    }
 
     fastify.post('/played', async function handler (request, reply) {
         const req = playedRequest.parse(request.body);
@@ -181,7 +182,7 @@ async function main() {
             } catch (e) {}
         }
 
-        const telegramData = processTelegramData(req.tg_data, process.env.BOT_TOKEN!);
+        const telegramData = processTelegramData(req.tg_data, config.TELEGRAM_BOT_TOKEN!);
 
         if (!telegramData.ok) return { ok: false };
 
@@ -242,7 +243,7 @@ async function main() {
         for (const ach of newAchievements) {
             scheduler.schedule({
                 type: 'sbt',
-                collection: achievementCollections[ach],
+                collection: ACHIEVEMENT_COLLECTION[ach],
                 owner: recipient,
             });
         }
@@ -250,14 +251,35 @@ async function main() {
             type: 'jetton',
             to: recipient,
             amount: BigInt(rewardTokens),
-            minter: tokenMinter,
+            minter: TOKEN_MINTER,
         });
 
         return { ok: true, reward: rewardTokens, achievements: newAchievements };
     });
 
+    fastify.get('/config', async function handler (request, reply) {
+        const tokenMinterAddress = TOKEN_MINTER.toString({testOnly: NETWORK === 'testnet'});
+        const achievementCollection = Object.fromEntries(
+          Object.entries(ACHIEVEMENT_COLLECTION)
+            .map(([k, v]) => [k, v.toString({testOnly: NETWORK === 'testnet'})])
+        );
+
+        const acceptFrom = await sdk.openJetton(TOKEN_MINTER).getWalletAddress(sdk.sender?.address!);
+        const tokenRecipient = acceptFrom.toString({testOnly: NETWORK === 'testnet'});
+
+        return {
+            ok: true,
+            config: {
+                network: NETWORK,
+                tokenMinter: tokenMinterAddress,
+                tokenRecipient: tokenRecipient,
+                achievementCollection: achievementCollection,
+            },
+        }
+    });
+
     fastify.get('/purchases', async function handler (request, reply) {
-        const telegramData = processTelegramData((request.query as any).auth, process.env.BOT_TOKEN!);
+        const telegramData = processTelegramData((request.query as any).auth, config.TELEGRAM_BOT_TOKEN!);
 
         if (!telegramData.ok) return { ok: false };
 
@@ -292,15 +314,20 @@ async function main() {
     const client = new TonClient4({
         endpoint: await getHttpV4Endpoint({ network: NETWORK }),
     });
-    const acceptFrom = await sdk.openJetton(tokenMinter).getWalletAddress(sdk.sender?.address!);
+    const acceptFrom = await sdk.openJetton(TOKEN_MINTER).getWalletAddress(sdk.sender?.address!);
 
     processTxsForever(sdk.sender?.address!, client, acceptFrom, known);
 
     try {
-        await fastify.listen({ port: 3000 })
+        await fastify.listen({ port: 3000, host: '0.0.0.0' });
     } catch (err) {
         fastify.log.error(err)
         process.exit(1)
+    }
+
+    if (config.NGROK_ENABLED) {
+        ngrok.connect({ addr: 3000, authtoken_from_env: true })
+          .then(listener => console.log(`Ingress established at: ${listener.url()}`));
     }
 }
 
