@@ -264,7 +264,7 @@ async function main() {
             .map(([k, v]) => [k, v.toString({testOnly: NETWORK === 'testnet'})])
         );
 
-        const acceptFrom = await sdk.openJetton(TOKEN_MINTER).getWalletAddress(sdk.sender?.address!);
+        const acceptFrom = sdk.sender?.address!;
         const tokenRecipient = acceptFrom.toString({testOnly: NETWORK === 'testnet'});
 
         return {
@@ -326,7 +326,7 @@ async function main() {
     }
 
     if (config.NGROK_ENABLED) {
-        ngrok.connect({ addr: 3000, authtoken_from_env: true })
+        ngrok.connect({ addr: 3000, authtoken_from_env: true, domain: config.NGROK_DOMAIN })
           .then(listener => console.log(`Ingress established at: ${listener.url()}`));
     }
 }
