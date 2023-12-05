@@ -110,7 +110,7 @@ initialize_env_file() {
     local DB_USER=$(openssl rand -hex 12)
     local DB_PASSWORD=$(openssl rand -hex 16)
     local NETWORK="testnet"
-    local MNEMONIC=$(ts-node ./scripts/generate-mnemonic.ts)
+    local MNEMONIC=$(node_modules/bin/ts-node ./scripts/generate-mnemonic.ts)
     local CORS_ENABLED="false"
     local CORS_ORIGIN="*"
     local NGROK_ENABLED="false"
@@ -188,7 +188,7 @@ EOF
 # Function to deploy wallet contract
 deploy_wallet_contract() {
     echo "Deploying wallet contract..."
-    if ! ts-node ./scripts/deploy-wallet.ts; then
+    if ! node_modules/bin/ts-node ./scripts/deploy-wallet.ts; then
         echo "Failed to deploy wallet contract." >&2
         exit 1
     fi
@@ -208,7 +208,7 @@ if [ -f ".env" ]; then
 fi
 
 # Deploying wallet contract (if no, write note to deploy it later and exit)
-if [[ $(ts-node ./scripts/get-wallet-state.ts | tail -n 1) != "active" ]]; then
+if [[ $(node_modules/.bin/ts-node ./scripts/get-wallet-state.ts | tail -n 1) != "active" ]]; then
   if ask_for_confirmation "Do you want to deploy the wallet contract now?"; then
       deploy_wallet_contract
   else
@@ -227,7 +227,7 @@ if [[ -z $JETTON_ADDRESS ]]; then
     if ask_for_confirmation "JETTON_ADDRESS is not set in .env file. Do you want to deploy it now?"; then
         # Deploy jetton address from wallet contract
         echo "Deploying jetton address from wallet contract..."
-        JETTON_ADDRESS=$(ts-node ./scripts/deploy-jetton.ts | tail -n 1)
+        JETTON_ADDRESS=$(node_modules/bin/ts-node ./scripts/deploy-jetton.ts | tail -n 1)
 
         # Check if jetton address is empty
         if [[ -z $JETTON_ADDRESS ]]; then
@@ -256,7 +256,7 @@ if [[ -z $FIRST_TIME_SBT_COLLECTION_ADDRESS ]]; then
     if ask_for_confirmation "FIRST_TIME_SBT_COLLECTION_ADDRESS is not set in .env file. Do you want to deploy it now?"; then
         # Deploy first time sbt collection address from wallet contract
         echo "Getting first time sbt collection address from wallet contract..."
-        FIRST_TIME_SBT_COLLECTION_ADDRESS=$(ts-node ./scripts/deploy-sbt-collection.ts first-time | tail -n 1)
+        FIRST_TIME_SBT_COLLECTION_ADDRESS=$(node_modules/bin/ts-node ./scripts/deploy-sbt-collection.ts first-time | tail -n 1)
 
         # Check if first time sbt collection address is empty
         if [[ -z $FIRST_TIME_SBT_COLLECTION_ADDRESS ]]; then
@@ -285,7 +285,7 @@ if [[ -z $FIVE_TIMES_SBT_COLLECTION_ADDRESS ]]; then
     if ask_for_confirmation "FIVE_TIMES_SBT_COLLECTION_ADDRESS is not set in .env file. Do you want to deploy it now?"; then
         # Deploy five times sbt collection address from wallet contract
         echo "Getting five times sbt collection address from wallet contract..."
-        FIVE_TIMES_SBT_COLLECTION_ADDRESS=$(ts-node ./scripts/deploy-sbt-collection.ts five-times | tail -n 1)
+        FIVE_TIMES_SBT_COLLECTION_ADDRESS=$(node_modules/bin/ts-node ./scripts/deploy-sbt-collection.ts five-times | tail -n 1)
 
         # Check if five times sbt collection address is empty
         if [[ -z $FIVE_TIMES_SBT_COLLECTION_ADDRESS ]]; then
