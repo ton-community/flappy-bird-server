@@ -18,12 +18,6 @@ ask_for_confirmation() {
     done
 }
 
-# Function to install yarn
-install_yarn() {
-    echo "Installing yarn..."
-    npm install -g yarn
-}
-
 # Function to read and validate user input
 read_input_and_validate() {
     local prompt=$1
@@ -200,19 +194,9 @@ deploy_wallet_contract() {
     fi
 }
 
-# Check if yarn is installed
-if ! command -v yarn &> /dev/null; then
-  if ask_for_confirmation "yarn could not be found. Do you want to install yarn?"; then
-    install_yarn
-  else
-    echo "Please install yarn and run this script again." >&2
-    exit 1
-  fi
-fi
-
-# Running yarn install with frozen lockfile
-echo "Running yarn install..."
-yarn install --frozen-lockfile
+# Running npm install with frozen lockfile
+echo "Running npm install..."
+npm ci
 
 # Check if .env file already exists
 if [ -f ".env" ]; then
