@@ -1,5 +1,5 @@
 import {createSdk, createWallet, toFriendlyAddress, Wallet} from "./utils/sdk";
-import {config} from "../src/config";
+import {deployConfig} from "../src/deploy-config";
 import {GameFiSDK, NftContent} from "@ton-community/gamefi-sdk";
 import {FIVE_TIMES_CONTENT_TEMPLATE, FIVE_TIMES_IMAGE} from '../tokens/five-times/content-template';
 import {FIRST_TIME_CONTENT_TEMPLATE, FIRST_TIME_IMAGE} from "../tokens/first-time/content-template";
@@ -22,13 +22,13 @@ switch (process.argv[2]) {
 }
 
 async function deploySbtCollection() {
-  const wallet: Wallet = await createWallet(config.MNEMONIC);
+  const wallet: Wallet = await createWallet(deployConfig.MNEMONIC);
   const sdk: GameFiSDK = await createSdk({
-    api: config.NETWORK,
+    api: deployConfig.NETWORK,
     wallet: wallet,
     storage: {
-      pinataApiKey: config.PINATA_API_KEY,
-      pinataSecretKey: config.PINATA_SECRET,
+      pinataApiKey: deployConfig.PINATA_API_KEY,
+      pinataSecretKey: deployConfig.PINATA_SECRET,
     }
   });
 
@@ -50,7 +50,7 @@ async function deploySbtCollection() {
     adminAddress: adminAddress,
   });
 
-  console.log(toFriendlyAddress(sbtContract.address, config.NETWORK));
+  console.log(toFriendlyAddress(sbtContract.address, deployConfig.NETWORK));
 }
 
 deploySbtCollection();

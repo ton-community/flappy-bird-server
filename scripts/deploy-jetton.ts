@@ -1,16 +1,16 @@
 import {createSdk, createWallet, toFriendlyAddress, Wallet} from "./utils/sdk";
-import {config} from "../src/config";
+import {deployConfig} from "../src/deploy-config";
 import {GameFiSDK, JettonContent} from "@ton-community/gamefi-sdk";
 import {JETTON_CONTENT_TEMPLATE, JETTON_IMAGE} from '../tokens/flap/content-template';
 
 async function deployJetton() {
-  const wallet: Wallet = await createWallet(config.MNEMONIC);
+  const wallet: Wallet = await createWallet(deployConfig.MNEMONIC);
   const sdk: GameFiSDK = await createSdk({
-    api: config.NETWORK,
+    api: deployConfig.NETWORK,
     wallet: wallet,
     storage: {
-      pinataApiKey: config.PINATA_API_KEY,
-      pinataSecretKey: config.PINATA_SECRET,
+      pinataApiKey: deployConfig.PINATA_API_KEY,
+      pinataSecretKey: deployConfig.PINATA_SECRET,
     }
   });
 
@@ -25,7 +25,7 @@ async function deployJetton() {
     adminAddress: adminAddress,
   });
 
-  console.log(toFriendlyAddress(jettonContract.address, config.NETWORK));
+  console.log(toFriendlyAddress(jettonContract.address, deployConfig.NETWORK));
 }
 
 deployJetton();
