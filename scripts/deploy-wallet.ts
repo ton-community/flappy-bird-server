@@ -93,6 +93,7 @@ async function deployWallet() {
   const walletBalance = await getAccountBalance(client, walletAddress);
   if (walletBalance < MIN_DEPLOY_BALANCE) {
     console.log(`Please, send at least ${fromNano(MIN_TOP_UP_TON)} TON to your wallet address to continue`);
+    console.log(`Use this bot to top up your wallet with test coins: https://t.me/testgiver_ton_bot`);
     await waitForWalletTopUp(client, walletAddress);
   } else {
     console.log(`Your wallet balance is ${fromNano(walletBalance)} TON`);
