@@ -6,6 +6,7 @@ export class User {
 
     @PrimaryColumn({
         nullable: false,
+        type: 'bigint'
     })
     id: number
 

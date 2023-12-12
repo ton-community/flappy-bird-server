@@ -16,5 +16,8 @@ RUN npm install
 # Copy the application source code
 COPY . .
 
+# Run migrations
+RUN npm run typeorm:run-migrations
+
 # Expose the port the app runs on
 EXPOSE 3000
