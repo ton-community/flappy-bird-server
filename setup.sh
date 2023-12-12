@@ -106,9 +106,6 @@ validate_non_empty() {
 
 # Function to initialize .env file
 initialize_env_file() {
-    # Generating secrets for DB_USER and DB_PASSWORD
-    local DB_USER=$(openssl rand -hex 12)
-    local DB_PASSWORD=$(openssl rand -hex 16)
     local NETWORK="testnet"
     local MNEMONIC=$(node_modules/.bin/ts-node ./scripts/generate-mnemonic.ts)
     local CORS_ENABLED="false"
@@ -116,10 +113,6 @@ initialize_env_file() {
     local NGROK_ENABLED="false"
     local NGROK_AUTHTOKEN=""
     local NGROK_DOMAIN=""
-
-    # Reading user input with validation
-    DB_USER=$(read_input_and_validate "Please enter your DB_USER or press Enter to use the generated [$DB_USER]:" "$DB_USER" validate_non_empty)
-    DB_PASSWORD=$(read_input_and_validate "Please enter your DB_PASSWORD or press Enter to use the generated [hidden]:" "$DB_PASSWORD" validate_non_empty)
 
     if ask_for_confirmation "Do you want to enable CORS?"; then
         CORS_ENABLED="true"
@@ -147,13 +140,6 @@ initialize_env_file() {
 
     # Creating the .env file
     cat << EOF > .env
-# Database Configuration
-DB_HOST=postgres
-DB_PORT=5432
-DB_NAME=flappy-bird-db
-DB_USER=$DB_USER
-DB_PASSWORD=$DB_PASSWORD
-
 # Web Server Configuration
 CORS_ENABLED=$CORS_ENABLED
 CORS_ORIGIN=$CORS_ORIGIN
