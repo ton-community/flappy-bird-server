@@ -23,9 +23,10 @@ Run `docker-compose -f ./docker-compose.dev.yaml up` to start the app.
 
 ### Running manually
 
-// todo
+Run `npm start`.
 
 ## Migrations
 
 * Create a new migration after changing entities `npm run typeorm:generate-migration --name=[NAME]`
+* Create an empty migration (for seeding, etc.) `npm run typeorm:create-migration --name=[NAME]`
 * Run migrations `npm run typeorm:run-migrations`

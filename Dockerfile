@@ -8,10 +8,10 @@ WORKDIR /usr/src/app
 RUN npm install -g ts-node ts-node-dev
 
 # Copy package.json, package-lock.json and yarn.lock files
-COPY package.json ./
+COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm ci
 
 # Copy the application source code
 COPY . .
