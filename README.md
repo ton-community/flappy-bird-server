@@ -15,15 +15,15 @@ General part will setup database settings, ngrok & pinata services, Telegram bot
 
 Web 3 part will setup your wallet, top up the wallet with test coins and jetton and collections for the achievements.
 
+### Running manually
+
+Run `npm start`.
+
 ### Running using Docker
 
 Ensure you have [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) installed. Run Docker.
 
 Run `docker-compose -f ./docker-compose.dev.yaml up` to start the app.
-
-### Running manually
-
-Run `npm start`.
 
 ## Migrations
 
