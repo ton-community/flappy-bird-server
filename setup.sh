@@ -6,14 +6,14 @@ ask_for_confirmation() {
     local response=""
 
     while true; do
-        read -p "$prompt [Y/n]: " response
+        read -p "$prompt [y/n]: " response
 
         if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
             return 0
         elif [[ $response =~ ^([nN][oO]|[nN])$ ]]; then
             return 1
         else
-            return 0
+            echo "Invalid response. Please enter y or n." >&2
         fi
     done
 }
@@ -193,6 +193,12 @@ if [ -f ".env" ]; then
     fi
 else
     initialize_env_file
+fi
+
+# Initialize database
+if [ ! -f "db.sqlite" ]; then
+    echo "Initializing database..."
+    npm run typeorm:run-migrations
 fi
 
 # Deploying wallet contract (if no, write note to deploy it later and exit)

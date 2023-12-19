@@ -22,4 +22,5 @@ services:
       FIVE_TIMES_SBT_COLLECTION_ADDRESS: ${FIVE_TIMES_SBT_COLLECTION_ADDRESS}
     volumes:
       - ./src:/usr/src/app/src
+      - ./db.sqlite:/usr/src/app/db.sqlite
     command: ts-node-dev --respawn src/index.ts

@@ -10,7 +10,7 @@
    },
    "dependencies": {
       "@fastify/cors": "8.4.1",
-      "@ngrok/ngrok": "^0.9.0",
+      "@ngrok/ngrok": "^0.9.1",
       "@orbs-network/ton-access": "2.3.3",
       "@ton-community/gamefi-sdk": "0.0.1",
       "@ton/core": "0.53.0",
@@ -29,6 +29,7 @@
       "start": "ts-node src/index.ts",
       "typeorm": "ts-node ./node_modules/typeorm/cli",
       "typeorm:run-migrations": "npm run typeorm migration:run -- -d ./src/data-source.ts",
-      "typeorm:generate-migration": "npm run typeorm -- -d ./src/data-source.ts migration:generate ./migrations/$npm_config_name"
+      "typeorm:generate-migration": "npm run typeorm -- -d ./src/data-source.ts migration:generate ./migrations/$npm_config_name",
+      "typeorm:create-migration": "npm run typeorm -- migration:create ./migrations/$npm_config_name"
    }
 }
