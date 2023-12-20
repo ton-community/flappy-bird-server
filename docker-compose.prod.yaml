@@ -1,23 +1,16 @@
 version: '3.8'
 services:
-  app:
-    container_name: flappy-bird-server-prod
+  server:
     build: .
     ports:
       - "3000:3000"
-    environment:
-      NODE_ENV: production
-      CORS_ENABLED: ${CORS_ENABLED}
-      CORS_ORIGIN: ${CORS_ORIGIN}
-      NGROK_ENABLED: ${NGROK_ENABLED}
-      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
-      NGROK_DOMAIN: ${NGROK_DOMAIN}
-      NETWORK: ${NETWORK}
-      MNEMONIC: ${MNEMONIC}
-      PINATA_API_KEY: ${PINATA_API_KEY}
-      PINATA_SECRET: ${PINATA_SECRET}
-      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
-      JETTON_ADDRESS: ${JETTON_ADDRESS}
-      FIRST_TIME_SBT_COLLECTION_ADDRESS: ${FIRST_TIME_SBT_COLLECTION_ADDRESS}
-      FIVE_TIMES_SBT_COLLECTION_ADDRESS: ${FIVE_TIMES_SBT_COLLECTION_ADDRESS}
+    env_file:
+      - .env
     command: ts-node src/index.ts
+  client:
+    build: ../flappy-bird-phaser
+    ports:
+      - "4000:4000"
+    env_file:
+      - .env
+    command: node_modules/.bin/webpack serve --mode production
