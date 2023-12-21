@@ -2,28 +2,40 @@
 
 Also see [ARCHITECTURE.md](/ARCHITECTURE.md)
 
+## What's in the box
+The example contains:
+* Creating jetton - a game currency to reward players.
+* Connect a TON wallet. Connect a wallet to earn game coins and win NFTs.
+* Rewarding users with NFTs. In the example we reward users for the first and the fifth game.
+* Buy game props in the shop.
+
 ## Setting up
+To run the project locally you need to setup: Telegram bot, [Telegram Mini App](https://core.telegram.org/bots/webapps), Ngrok (proxy), Pinata (IPFS).
 
-### Preparation
-1. Register create and setup your [Ngrok account](https://dashboard.ngrok.com/get-started/your-authtoken). After getting your auth token, [create a domain](https://dashboard.ngrok.com/cloud-edge/domains). Ngrok is used to expose your local server to the internet. It's necessary to make your app accessible to Telegram via real domain name with SSL enabled. For example, your `http://localhost:3000` will be available at `https://your-domain.ngrok.io`
-1. Create and setup your [Pinata account](https://app.pinata.cloud/developers/api-keys). Pinata is used to store your game assets, like achievement badges. You can select admin privileges for your API key. Save your `API key` and `API secret`. You can not to reveal `API secret` again.
-1. Run `./setup.sh`. If you use Windows you can run in from `Git Bash CLI` which comes with `Git` or you can run the project using [Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/install). Follow the instructions
+### Ngrok
+Ngrok is used to expose your local server to the internet. It's necessary to make your app accessible to Telegram via real domain name with SSL enabled. For example, your `http://localhost:3000` will be available at `https://your-domain.ngrok.io`
 
-Conceptually, the process can be separated in two parts: the general part and web 3 part.
+Register create and setup your [Ngrok account](https://dashboard.ngrok.com/get-started/your-authtoken). After getting your auth token, [create a domain](https://dashboard.ngrok.com/cloud-edge/domains).
 
-General part will setup database settings, ngrok & pinata services, Telegram bot, etc.
+### Pinata
+Pinata is decentralized file system used to store your game assets, like achievement badges.
 
-Web 3 part will setup your wallet, top up the wallet with test coins and jetton and collections for the achievements.
+Create and setup your [Pinata account](https://app.pinata.cloud/developers/api-keys). You can select admin privileges for your API key. Save your `API key` and `API secret`. You can not to reveal `API secret` again.
 
-### Running manually
+### Telegram bot & Telegram Web App
+1. Create a Telegram bot using `/newbot` command of [BotFather](https://t.me/botfather). Save your bot token.
+1. Run `/newapp` select your bot to link it with your Telegram Mini App. Enter app name, description, `640x360` px image. Specify domain when the game will be hosted (use domain you got from Ngrok). Then input your game short name for the URL. You will receive full game URL inside of Telegram, e. g.: `https://t.me/flappybirddevbot/flappybirddev` Save it.
 
-Run `npm start`.
+### Environment variables
+Run `./setup.sh`. If you use Windows you can run in from `Git Bash CLI` which comes with `Git` or you can run the project using [Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/install). Follow the instructions.
 
-### Running using Docker
+You are ready to go!
 
-Ensure you have [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) installed. Run Docker.
+## Running
 
-Run `docker-compose -f ./docker-compose.dev.yaml up` to start the app.
+To run manually use `npm run dev` command.
+
+To run with Docker use `docker-compose -f ./docker-compose.dev.yaml up` command. Ensure you have [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) installed. Run Docker.
 
 ## Migrations
 
