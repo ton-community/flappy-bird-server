@@ -3,5 +3,11 @@
     "workspaces": [
         "workspaces/server",
         "workspaces/client"
-    ]
+    ],
+    "scripts": {
+        "dev": "concurrently \"npm run dev --workspace=server\" \"npm run dev --workspace=client\""
+    },
+    "devDependencies": {
+        "concurrently": "^8.2.2"
+    }
 }
