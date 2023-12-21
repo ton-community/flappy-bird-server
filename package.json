@@ -1,4 +1,7 @@
 {
     "name": "flappy-bird",
-    "workspaces": ["workspaces/server"]
+    "workspaces": [
+        "workspaces/server",
+        "workspaces/client"
+    ]
 }

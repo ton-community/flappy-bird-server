@@ -12,9 +12,10 @@ services:
       - ./workspaces/server/src:/app/workspaces/server/src
       # - ./db.sqlite:/app/db.sqlite
     command: npm run dev --workspace=server
-    # command: tail -f /dev/null
   client:
-    build: ../flappy-bird-phaser
+    build:
+      context: .
+      dockerfile: workspaces/client/Dockerfile
     ports:
       - "4000:4000"
     env_file:
@@ -23,6 +24,6 @@ services:
       # use WATCHPACK_POLLING is needed to fix webpack watch issue on windows
       - WATCHPACK_POLLING=true
     volumes:
-      - ../flappy-bird-phaser/src:/app/src
-    command: node_modules/.bin/webpack serve --mode development
+      - ./workspaces/client/src:/app/workspaces/client/src
+    command: npm run dev --workspace=client
 

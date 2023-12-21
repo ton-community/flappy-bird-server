@@ -1,0 +1,23 @@
+export const GAME_HEIGHT = window.innerHeight;
+export const GAME_WIDTH = window.innerWidth;
+export const GAP_START = GAME_HEIGHT / 6;
+export const GAP_MIN = 125;
+export const GAP_MAX = 175;
+export const GAP_END = 600 - GAP_START - GAP_MAX;
+export const GRAVITY = 750;
+export const JUMP_VEL = 300;
+export const JUMP_COOLDOWN = 20;
+export const COLUMN_ACCEL = 0.001;
+export const COLUMN_TIME_ACCEL = 0.01;
+export const PIPE_SCALE = 1.5;
+export const PIPE_WIDTH = 52 * PIPE_SCALE;
+export const PIPE_HEIGHT = 320 * PIPE_SCALE;
+export const FLAP_THRESH = 50;
+export const BG_HEIGHT = 512;
+export const INITIAL_COLUMN_VELOCITY = -150;
+export const INITIAL_COLUMN_INTERVAL = 3000;
+
+export const PIPES_AVAILABLE = ['pipe-green', 'pipe-red'];
+export const PIPES_COSTS = [0, 1];
+export const SHOP_RELOAD_INTERVAL = 10000;
+export const BALANCE_RELOAD_INTERVAL = 10000;
