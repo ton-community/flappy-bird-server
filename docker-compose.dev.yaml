@@ -1,15 +1,18 @@
 version: '3.8'
 services:
   server:
-    build: .
+    build:
+      context: .
+      dockerfile: workspaces/server/Dockerfile
     ports:
       - "3000:3000"
     env_file:
       - .env
     volumes:
-      - ./src:/usr/src/app/src
-      - ./db.sqlite:/usr/src/app/db.sqlite
-    command: ts-node-dev --respawn src/index.ts
+      - ./workspaces/server/src:/app/workspaces/server/src
+      # - ./db.sqlite:/app/db.sqlite
+    command: npm run dev --workspace=server
+    # command: tail -f /dev/null
   client:
     build: ../flappy-bird-phaser
     ports:

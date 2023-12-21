@@ -1,4 +1,4 @@
-import {deployConfig} from '../src/deploy-config';
+import {deployConfig} from '../workspaces/server/src/deploy-config';
 import {Address, fromNano, TonClient4} from "@ton/ton";
 import {internal, SendMode, toNano} from "@ton/core";
 import {wait} from "./utils/wait";

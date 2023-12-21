@@ -1,5 +1,5 @@
 import {createSdk, createWallet, toFriendlyAddress, Wallet} from "./utils/sdk";
-import {deployConfig} from "../src/deploy-config";
+import {deployConfig} from "../workspaces/server/src/deploy-config";
 import {GameFiSDK, JettonContent} from "@ton-community/gamefi-sdk";
 import {JETTON_CONTENT_TEMPLATE, JETTON_IMAGE} from '../tokens/flap/content-template';
 

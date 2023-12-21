@@ -2,22 +2,18 @@
 FROM node:20
 
 # Set the working directory in the container
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Install ts-node and ts-node-dev for TypeScript execution and hot reloading
 RUN npm install -g ts-node ts-node-dev
 
-# Copy package.json, package-lock.json and yarn.lock files
-COPY package*.json ./
-
 # Install dependencies
+COPY package*.json ./
+COPY workspaces/server/package*.json workspaces/server/
 RUN npm ci
 
 # Copy the application source code
-COPY . .
+COPY workspaces/server workspaces/server
 
 # Run migrations
-RUN npm run typeorm:run-migrations
-
-# Expose the port the app runs on
-EXPOSE 3000
+RUN npm run typeorm:run-migrations --workspace=server
