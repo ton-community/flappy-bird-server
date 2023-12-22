@@ -13,12 +13,12 @@ The example contains:
 To run the project locally you need to setup: Telegram bot, [Telegram Mini App](https://core.telegram.org/bots/webapps), Ngrok (proxy), Pinata (IPFS).
 
 ### Ngrok
-Ngrok is used to expose your local server to the internet. It's necessary to make your app accessible to Telegram via real domain name with SSL enabled. For example, your `http://localhost:3000` will be available at `https://your-domain.ngrok.io`
+> Ngrok is used to expose your local server to the internet. It's necessary to make your app accessible to Telegram via real domain name with SSL enabled. For example, your `http://localhost:3000` will be available at `https://your-domain.ngrok.io`
 
-Register create and setup your [Ngrok account](https://dashboard.ngrok.com/get-started/your-authtoken). After getting your auth token, [create a domain](https://dashboard.ngrok.com/cloud-edge/domains).
+Create and setup your [Ngrok account](https://dashboard.ngrok.com/get-started/your-authtoken). After getting your auth token, [create a domain](https://dashboard.ngrok.com/cloud-edge/domains).
 
 ### Pinata
-Pinata is decentralized file system used to store your game assets, like achievement badges.
+> Pinata is decentralized file system used to store your game assets, like achievement badges.
 
 Create and setup your [Pinata account](https://app.pinata.cloud/developers/api-keys). You can select admin privileges for your API key. Save your `API key` and `API secret`. You can not to reveal `API secret` again.
 
@@ -27,15 +27,15 @@ Create and setup your [Pinata account](https://app.pinata.cloud/developers/api-k
 1. Run `/newapp` select your bot to link it with your Telegram Mini App. Enter app name, description, `640x360` px image. Specify domain when the game will be hosted (use domain you got from Ngrok). Then input your game short name for the URL. You will receive full game URL inside of Telegram, e. g.: `https://t.me/flappybirddevbot/flappybirddev` Save it.
 
 ### Environment variables
-Run `./setup.sh`. If you use Windows you can run in from `Git Bash CLI` which comes with `Git` or you can run the project using [Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/install). Follow the instructions.
-
-You are ready to go!
+Run `./setup.sh`. Follow the instructions. You are ready to go!
+>If you use Windows you can run in from `Git Bash CLI` which comes with `Git` or you can run the project using [Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/install).
 
 ## Running
 
 To run manually use `npm run dev` command.
 
-To run with Docker use `docker-compose -f ./docker-compose.dev.yaml up` command. Ensure you have [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) installed. Run Docker.
+To run with Docker use `docker-compose -f ./docker-compose.dev.yaml up` command.
+>Ensure you have [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) installed. Run Docker.
 
 ## Migrations
 
