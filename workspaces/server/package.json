@@ -13,14 +13,12 @@
    },
    "devDependencies": {
       "@types/node": "^16.11.10",
-      "env-cmd": "^10.1.0",
       "ts-node": "10.7.0",
       "ts-node-dev": "2.0.0",
       "typescript": "4.5.2"
    },
    "dependencies": {
       "@fastify/cors": "8.4.1",
-      "@ngrok/ngrok": "^0.9.1",
       "@orbs-network/ton-access": "2.3.3",
       "@ton-community/gamefi-sdk": "0.0.1",
       "@ton/core": "0.53.0",

@@ -13,7 +13,9 @@ The example contains:
 To run the project locally you need to setup: Telegram bot, [Telegram Mini App](https://core.telegram.org/bots/webapps), Ngrok (proxy), Pinata (IPFS).
 
 ### Ngrok
-> Ngrok is used to expose your local server to the internet. It's necessary to make your app accessible to Telegram via real domain name with SSL enabled. For example, your `http://localhost:3000` will be available at `https://your-domain.ngrok.io`
+> Ngrok is used to expose your local server to the internet. It's necessary to make your app accessible to Telegram via real domain name with SSL enabled. For example, your `http://localhost:3000` will be available at `https://your-domain.ngrok.io`.
+
+> You can use any other proxy service: [localtunnel](https://theboroer.github.io/localtunnel-www/), [localhost.run](https://localhost.run/), etc. To integrate one to the setup just edit `workspaces/client/expose-localhost.js` file.
 
 Create and setup your [Ngrok account](https://dashboard.ngrok.com/get-started/your-authtoken). After getting your auth token, [create a domain](https://dashboard.ngrok.com/cloud-edge/domains).
 

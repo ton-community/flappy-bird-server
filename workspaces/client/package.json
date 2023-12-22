@@ -4,13 +4,14 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "env-cmd -f ../../.env webpack serve --mode development",
+    "dev": "concurrently \"npm run expose\" \"env-cmd -f ../../.env webpack serve --mode development\"",
     "start": "webpack serve --mode production",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "expose": "env-cmd -f ../../.env node ./expose-localhost.js"
   },
   "devDependencies": {
     "@types/ua-parser-js": "^0.7.39",
-    "env-cmd": "^10.1.0",
+    "@ngrok/ngrok": "^0.9.1",
     "ts-loader": "^9.4.4",
     "typescript": "^5.1.6",
     "webpack": "^5.88.2",

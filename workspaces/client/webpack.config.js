@@ -28,6 +28,12 @@ module.exports = {
     compress: true,
     port: 4000,
     allowedHosts: 'all',
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        pathRewrite: { '^/api': '' },
+      }
+    }
   },
   plugins: [
     new webpack.ProvidePlugin({
