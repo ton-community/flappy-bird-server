@@ -40,7 +40,7 @@ module.exports = {
       Buffer: ['buffer', 'Buffer'],
     }),
     new webpack.EnvironmentPlugin([
-      'BACKEND_DOMAIN',
+      'API_URL',
       'MINI_APP_URL'
     ])
   ]

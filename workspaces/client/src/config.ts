@@ -26,17 +26,17 @@ export interface Config {
 }
 
 export async function loadConfig(): Promise<Config> {
-    if (process.env.BACKEND_DOMAIN == null) {
-        throw new Error('BACKEND_DOMAIN is not set.');
+    if (process.env.API_URL == null) {
+        throw new Error('API_URL is not set.');
     }
     if (process.env.MINI_APP_URL == null) {
         throw new Error('MINI_APP_URL is not set.');
     }
 
-    const backendDomain = process.env.BACKEND_DOMAIN;
+    const apiUrl = process.env.API_URL;
     const miniAppUrl = process.env.MINI_APP_URL;
 
-    const configRequest = await fetch(backendDomain + '/config');
+    const configRequest = await fetch(apiUrl + '/config');
     const configResponse: BackendConfig = await configRequest.json();
     
     if (!configResponse.ok) {
@@ -44,7 +44,7 @@ export async function loadConfig(): Promise<Config> {
     }
 
     return {
-        ENDPOINT: backendDomain,
+        ENDPOINT: apiUrl,
         APP_URL: miniAppUrl as Url,
         APP_MANIFEST_URL: 'https://raw.githubusercontent.com/ton-defi-org/tonconnect-manifest-temp/main/tonconnect-manifest.json',
         NETWORK: configResponse.config.network,

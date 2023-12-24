@@ -95,6 +95,22 @@ validate_telegram_bot_token() {
     return 0
 }
 
+validate_env_mode() {
+    if [[ $1 != "development" && $1 != "production" ]]; then
+        echo "Enter either development or production." >&2
+        return 1
+    fi
+    return 0
+}
+
+validate_telegram_url() {
+    if [[ ! $1 =~ ^https://t.me/.+/.+$ ]]; then
+        echo "Invalid Telegram link. It should start from https://t.me." >&2
+        return 1
+    fi
+    return 0
+}
+
 # Function to validate non-empty input
 validate_non_empty() {
     if [[ -z $1 ]]; then
@@ -106,6 +122,7 @@ validate_non_empty() {
 
 # Function to initialize .env file
 initialize_env_file() {
+    local NODE_ENV="development"
     local NETWORK="testnet"
     local MNEMONIC=$(node_modules/.bin/ts-node ./scripts/generate-mnemonic.ts)
     local CORS_ENABLED="false"
@@ -113,33 +130,40 @@ initialize_env_file() {
     local NGROK_ENABLED="false"
     local NGROK_AUTHTOKEN=""
     local NGROK_DOMAIN=""
+    local API_URL="http://localhost:4000/api"
 
-    if ask_for_confirmation "Do you want to enable CORS?"; then
-        CORS_ENABLED="true"
-        CORS_ORIGIN=$(read_input_and_validate "Please enter your CORS_ORIGIN (e.g. http://localhost:3000) or press Enter to use the default [*]:" "*" validate_non_empty)
-    else
-        CORS_ENABLED="false"
-        CORS_ORIGIN="*"
-    fi
-
-    if ask_for_confirmation "Do you want to enable ngrok?"; then
+    local TELEGRAM_BOT_TOKEN=$(read_input_and_validate "Enter TELEGRAM_BOT_TOKEN (e.g. 1234567890:ABCdefGHIjklMNoPQRsTUVwxyZ):" "" validate_telegram_bot_token)
+    local MINI_APP_URL=$(read_input_and_validate "Enter MINI_APP_URL (e.g. https://t.me/mybot/myapp):" "" validate_telegram_url)
+    NGROK_DOMAIN=$(read_input_and_validate "Enter APP_URL. Use the same URL you sent to BotFather (for development input Ngrok domain, check out https://dashboard.ngrok.com/cloud-edge/domains):" "" validate_non_empty)
+    NGROK_DOMAIN=$(echo $NGROK_DOMAIN | sed 's~http[s]*://~~')
+    if [[ $NGROK_DOMAIN == *ngrok-free.app ]]; then
         NGROK_ENABLED="true"
-        NGROK_AUTHTOKEN=$(read_input_and_validate "Please enter your NGROK_AUTHTOKEN (e.g. 0A1B2C3D4E5F6G7H8I9J0K1L2M3_4N5O6P7Q8R9S0T1U2V3W4):" "" validate_non_empty)
-        NGROK_DOMAIN=$(read_input_and_validate "Please enter your NGROK_DOMAIN (this requires registering in the https://dashboard.ngrok.com/cloud-edge/domains):" "" validate_non_empty)
-    else
-        NGROK_ENABLED="false"
-        NGROK_AUTHTOKEN=""
-        NGROK_DOMAIN=""
+        NGROK_AUTHTOKEN=$(read_input_and_validate "Enter NGROK_AUTHTOKEN (e.g. 0A1B2C3D4E5F6G7H8I9J0K1L2M3_4N5O6P7Q8R9S0T1U2V3W4):" "" validate_non_empty)
     fi
 
-    NETWORK=$(read_input_and_validate "Please enter your NETWORK (mainnet or testnet) or press Enter to use the default [$NETWORK]:" "$NETWORK" validate_network)
-    MNEMONIC=$(read_input_and_validate "Please enter your MNEMONIC (24 words separated by spaces) or press Enter to use the generated [hidden]:" "$MNEMONIC" validate_mnemonic)
+    CORS_ENABLED="true"
+    CORS_ORIGIN=https://$NGROK_DOMAIN
+
+    API_URL=$(read_input_and_validate "Enter API_URL. If you use Ngrok continue with the default value. Otherwise specify dedicated backend URL: [$API_URL]:" "$API_URL" validate_non_empty)
+    if [[ $API_URL != http* ]]; then
+        API_URL="https://$API_URL"
+    fi
+
+    NETWORK=$(read_input_and_validate "Enter blockhain NETWORK (mainnet or testnet), default [$NETWORK]:" "$NETWORK" validate_network)
+    NODE_ENV=$(read_input_and_validate "Enter NODE_ENV (development or production), default [$NODE_ENV]:" "$NODE_ENV" validate_env_mode)
     local PINATA_API_KEY=$(read_input_and_validate "Please enter your PINATA_API_KEY (20 characters long):" "" validate_pinata_api_key)
     local PINATA_SECRET=$(read_input_and_validate "Please enter your PINATA_SECRET (64 characters long):" "" validate_pinata_secret)
-    local TELEGRAM_BOT_TOKEN=$(read_input_and_validate "Please enter your TELEGRAM_BOT_TOKEN (in the format 1234567890:ABCdefGHIjklMNoPQRsTUVwxyZ):" "" validate_telegram_bot_token)
+    
+    MNEMONIC=$(read_input_and_validate "Enter MNEMONIC (24 words separated by spaces) or press Enter to use the generated [hidden]:" "$MNEMONIC" validate_mnemonic)
 
     # Creating the .env file
     cat << EOF > .env
+NODE_ENV=$NODE_ENV
+
+# Client Configuration
+API_URL=$API_URL
+MINI_APP_URL=$MINI_APP_URL
+
 # Web Server Configuration
 CORS_ENABLED=$CORS_ENABLED
 CORS_ORIGIN=$CORS_ORIGIN
@@ -196,9 +220,9 @@ else
 fi
 
 # Initialize database
-if [ ! -f "db.sqlite" ]; then
+if [ ! -f "./workspaces/server/db.sqlite" ]; then
     echo "Initializing database..."
-    npm run typeorm:run-migrations
+    npm run typeorm:run-migrations --workspace=server
 fi
 
 # Deploying wallet contract (if no, write note to deploy it later and exit)
