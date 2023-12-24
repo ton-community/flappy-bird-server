@@ -10,7 +10,6 @@ services:
       - .env
     volumes:
       - ./workspaces/server/src:/app/workspaces/server/src
-      # - ./db.sqlite:/app/db.sqlite
     command: npm run dev --workspace=server
   client:
     build:
@@ -23,6 +22,7 @@ services:
     environment:
       # use WATCHPACK_POLLING is needed to fix webpack watch issue on windows
       - WATCHPACK_POLLING=true
+      - IS_DOCKER=true
     volumes:
       - ./workspaces/client/src:/app/workspaces/client/src
     command: npm run dev --workspace=client

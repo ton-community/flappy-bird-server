@@ -1,16 +1,27 @@
 version: '3.8'
 services:
   server:
-    build: .
+    build:
+      context: .
+      dockerfile: workspaces/server/Dockerfile
     ports:
       - "3000:3000"
     env_file:
       - .env
-    command: ts-node src/index.ts
+    volumes:
+      - ./workspaces/server/src:/app/workspaces/server/src
+    command: npm run start --workspace=server
   client:
-    build: ../flappy-bird-phaser
+    build:
+      context: .
+      dockerfile: workspaces/client/Dockerfile
     ports:
       - "4000:4000"
     env_file:
       - .env
-    command: node_modules/.bin/webpack serve --mode production
+    environment:
+      - IS_DOCKER=true
+    volumes:
+      - ./workspaces/client/src:/app/workspaces/client/src
+    command: npm run start --workspace=client
+

@@ -13,4 +13,5 @@ COPY workspaces/client/package*.json workspaces/client/
 RUN npm ci
 
 # Copy the application source code
+COPY tsconfig.json ./
 COPY workspaces/client workspaces/client

@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "concurrently \"npm run expose\" \"env-cmd -f ../../.env webpack serve --mode development\"",
-    "start": "webpack serve --mode production",
+    "start": "concurrently \"npm run expose\" \"webpack serve --mode production\"",
     "build": "webpack --mode production",
     "expose": "env-cmd -f ../../.env node ./expose-localhost.js"
   },

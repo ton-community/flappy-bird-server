@@ -30,7 +30,7 @@ module.exports = {
     allowedHosts: 'all',
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: `http://${process.env.IS_DOCKER === 'true' ? 'server' : 'localhost'}:3000`,
         pathRewrite: { '^/api': '' },
       }
     }
