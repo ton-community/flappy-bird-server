@@ -1,0 +1,32 @@
+{
+  "name": "client",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "dev": "concurrently \"npm run expose\" \"env-cmd -f ../../.env webpack serve --mode development\"",
+    "start": "concurrently \"npm run expose\" \"webpack serve --mode production\"",
+    "build": "webpack --mode production",
+    "expose": "env-cmd -f ../../.env node ./expose-localhost.js"
+  },
+  "devDependencies": {
+    "@types/ua-parser-js": "^0.7.39",
+    "@ngrok/ngrok": "^0.9.1",
+    "ts-loader": "^9.4.4",
+    "typescript": "^5.1.6",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  },
+  "dependencies": {
+    "@orbs-network/ton-access": "^2.3.3",
+    "@ton/core": "^0.53.0",
+    "@ton/crypto": "^3.2.0",
+    "@ton/ton": "^13.5.1",
+    "@tonconnect/sdk": "^3.0.0-beta.5",
+    "@tonconnect/ui": "^2.0.0-beta.8",
+    "buffer": "^6.0.3",
+    "phaser": "^3.60.0",
+    "ua-parser-js": "^1.0.37"
+  }
+}

@@ -15,7 +15,6 @@ import { config } from './config';
 import { getHttpV4Endpoint } from '@orbs-network/ton-access';
 import { processTelegramData } from "./telegram";
 import { z } from 'zod';
-import ngrok from '@ngrok/ngrok';
 
 const PROCESS_INTERVAL = 10000;
 const { NETWORK, TOKEN_MINTER, ACHIEVEMENT_COLLECTION } = config;
@@ -323,11 +322,6 @@ async function main() {
     } catch (err) {
         fastify.log.error(err)
         process.exit(1)
-    }
-
-    if (config.NGROK_ENABLED) {
-        ngrok.connect({ addr: 3000, authtoken_from_env: true, domain: config.NGROK_DOMAIN })
-          .then(listener => console.log(`Ingress established at: ${listener.url()}`));
     }
 }
 

@@ -8,7 +8,7 @@ import { resolve } from 'path';
 
 export const AppDataSource = new DataSource({
     type: 'sqlite',
-    database: 'db.sqlite',
+    database: resolve(__dirname, '../db.sqlite'),
     synchronize: false,
     logging: true,
     entities: [User, Item, Purchase, Global],

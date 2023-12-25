@@ -15,22 +15,6 @@ if (process.env.CORS_ENABLED === 'true' && !process.env.CORS_ORIGIN) {
   throw new Error('CORS_ORIGIN is not set');
 }
 
-if (!process.env.NGROK_ENABLED) {
-  throw new Error('NGROK_ENABLED is not set');
-}
-
-if (process.env.NGROK_ENABLED !== 'true' && process.env.NGROK_ENABLED !== 'false') {
-  throw new Error(`NGROK_ENABLED is not valid: ${process.env.NGROK_ENABLED} is not true or false`);
-}
-
-if (process.env.NGROK_ENABLED === 'true' && !process.env.NGROK_AUTHTOKEN) {
-  throw new Error('NGROK_AUTHTOKEN is not set');
-}
-
-if (process.env.NGROK_ENABLED === 'true' && !process.env.NGROK_DOMAIN) {
-  throw new Error('NGROK_DOMAIN is not set');
-}
-
 if (!process.env.NETWORK) {
   throw new Error('NETWORK is not set');
 }
@@ -62,9 +46,6 @@ if (!process.env.TELEGRAM_BOT_TOKEN) {
 export interface DeployConfig {
   CORS_ENABLED: boolean;
   CORS_ORIGIN?: string;
-  NGROK_ENABLED: boolean;
-  NGROK_AUTHTOKEN?: string;
-  NGROK_DOMAIN?: string;
   NETWORK: Network;
   MNEMONIC: string;
   PINATA_API_KEY: string;
@@ -75,9 +56,6 @@ export interface DeployConfig {
 export const deployConfig: DeployConfig = {
   CORS_ENABLED: process.env.CORS_ENABLED === 'true',
   CORS_ORIGIN: process.env.CORS_ORIGIN,
-  NGROK_ENABLED: process.env.NGROK_ENABLED === 'true',
-  NGROK_AUTHTOKEN: process.env.NGROK_AUTHTOKEN,
-  NGROK_DOMAIN: process.env.NGROK_DOMAIN,
   NETWORK: process.env.NETWORK,
   MNEMONIC: process.env.MNEMONIC,
   PINATA_API_KEY: process.env.PINATA_API_KEY,

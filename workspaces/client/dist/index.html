@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Flappy Bird</title>
+    <meta charset="utf8">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0" />
+    <style>
+        @font-face {
+            font-family: Flappy;
+            src: url(assets/flappy-font.ttf);
+        }
+
+        html, body {
+            margin: 0;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+
+        #balance-container {
+            z-index: 1;
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #overlay {
+            z-index: 1;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            pointer-events: none;
+        }
+
+        #overlay-mid {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #connect, #use, #shop, #play, #skin-prev, #skin-next {
+            pointer-events: auto;
+        }
+
+        #score {
+            color: white;
+            font-size: 60px;
+            margin-top: 30px;
+            text-align: center;
+            display: none;
+        }
+
+        #error {
+            display: inline-block;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 30px;
+            text-align: center;
+        }
+
+        .btn {
+            background-color: #0098EA;
+            height: 60px;
+            font-size: 40px;
+            border-radius: 10px;
+            border: none;
+            padding: 10px;
+            color: white;
+        }
+
+        #buttons {
+            margin-bottom: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #skin-chooser {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+        }
+
+        #skin-chooser > * {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        #skin-chooser:first-child {
+            margin-right: auto;
+        }
+
+        #skin-chooser:last-child {
+            margin-left: auto;
+        }
+
+        #skin-chooser-mid {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .skin-chooser-btn-cont {
+            width: 30px;
+            margin: 0 10px;
+        }
+
+        .skin-chooser-btn {
+            width: 30px;
+            height: 30px;
+        }
+
+        #rewards {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #new-achievements {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #spinner-container {
+            display: none;
+        }
+
+        .flappy-text {
+            font-family: Flappy;
+            font-size: 32px;
+            color: black;
+        }
+
+        .game-over {
+            color: #FA9F51;
+            font-size: 60px;
+        }
+
+        .award-text {
+            font-size: 28px;
+            color: white;
+        }
+
+        .connect-button {
+            width: 326px;
+            height: 76px;
+            color: white;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            background-image: url(assets/connect.svg);
+            cursor: pointer;
+        }
+
+        .button-narrow {
+            width: 171px;
+            height: 76px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            background-image: url(assets/button-narrow.svg);
+        }
+
+        .button-wide {
+            width: 267px;
+            background-image: url(assets/button-wide.svg);
+        }
+
+        .ton-logo {
+            background-image: url(assets/ton-logo.svg);
+            width: 24px;
+            height: 24px;
+        }
+
+        .play-icon {
+            width: 21px;
+            height: 34px;
+            background-image: url(assets/play.svg);
+        }
+
+        .lds-ring {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+        .lds-ring div {
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
+            width: 64px;
+            height: 64px;
+            margin: 8px;
+            border: 8px solid #fff;
+            border-radius: 50%;
+            animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            border-color: #fff transparent transparent transparent;
+        }
+        .lds-ring div:nth-child(1) {
+            animation-delay: -0.45s;
+        }
+        .lds-ring div:nth-child(2) {
+            animation-delay: -0.3s;
+        }
+        .lds-ring div:nth-child(3) {
+            animation-delay: -0.15s;
+        }
+        @keyframes lds-ring {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div id="balance-container" style="display: none;"><span>Balance: </span><span id="balance">0</span></div>
+    <div id="overlay">
+        <div id="overlay-top">
+            <div class="flappy-text" id="score">0</div>
+        </div>
+        <div id="overlay-mid">
+            <div id="after-game" style="display: none;">
+                <div id="rewards" style="display: none;">
+                    <div class="flappy-text game-over">Game Over</div>
+                    <div id="tokens-container"><span class="flappy-text award-text">Tokens awarded: </span><span class="flappy-text award-text" id="tokens-awarded">0</span></div>
+                    <div id="new-achievements"></div>
+                </div>
+                <div id="error" style="display: none;"></div>
+            </div>
+            <div id="spinner-container"><div class="lds-ring"><div></div><div></div><div></div><div></div></div></div>
+            <div id="connect" style="display: none;" class="connect-button"><div style="margin-right: 12px;" class="ton-logo"></div><div class="flappy-text" style="color: white;">connect wallet</div></div>
+            <div id="skin-chooser" style="display: none;">
+                <div id="skin-chooser-left"></div>
+                <div id="skin-chooser-mid">
+                    <div class="skin-chooser-btn-cont"><img id="skin-prev" class="skin-chooser-btn" src="assets/prev.svg"></div>
+                    <div id="skin-current"><img id="skin-image"></div>
+                    <div class="skin-chooser-btn-cont"><img id="skin-next" class="skin-chooser-btn" src="assets/next.svg"></div>
+                </div>
+                <div id="skin-chooser-right"></div>
+            </div>
+        </div>
+        <div id="overlay-bottom">
+            <div id="buttons" style="display: none;">
+                <div class="button-narrow" id="use" style="display: none"><div class="flappy-text" id="use-text">Use</div></div>
+                <div style="margin: 12px 0;" class="button-narrow" id="shop"><div class="flappy-text">Shop</div></div>
+                <div class="button-narrow" id="play"><div style="margin-right: 12px;" class="play-icon"></div><div class="flappy-text" id="play-text">Play</div></div>
+            </div>
+        </div>
+    </div>
+    <script src="bundle.js?1"></script>
+</body>
+</html>

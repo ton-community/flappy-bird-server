@@ -1,26 +1,29 @@
 version: '3.8'
 services:
-  app:
-    container_name: flappy-bird-server-dev
-    build: .
+  server:
+    build:
+      context: .
+      dockerfile: workspaces/server/Dockerfile
     ports:
       - "3000:3000"
-    environment:
-      NODE_ENV: development
-      CORS_ENABLED: ${CORS_ENABLED}
-      CORS_ORIGIN: ${CORS_ORIGIN}
-      NGROK_ENABLED: ${NGROK_ENABLED}
-      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
-      NGROK_DOMAIN: ${NGROK_DOMAIN}
-      NETWORK: ${NETWORK}
-      MNEMONIC: ${MNEMONIC}
-      PINATA_API_KEY: ${PINATA_API_KEY}
-      PINATA_SECRET: ${PINATA_SECRET}
-      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
-      JETTON_ADDRESS: ${JETTON_ADDRESS}
-      FIRST_TIME_SBT_COLLECTION_ADDRESS: ${FIRST_TIME_SBT_COLLECTION_ADDRESS}
-      FIVE_TIMES_SBT_COLLECTION_ADDRESS: ${FIVE_TIMES_SBT_COLLECTION_ADDRESS}
+    env_file:
+      - .env
     volumes:
-      - ./src:/usr/src/app/src
-      - ./db.sqlite:/usr/src/app/db.sqlite
-    command: ts-node-dev --respawn src/index.ts
+      - ./workspaces/server/src:/app/workspaces/server/src
+    command: npm run dev --workspace=server
+  client:
+    build:
+      context: .
+      dockerfile: workspaces/client/Dockerfile
+    ports:
+      - "4000:4000"
+    env_file:
+      - .env
+    environment:
+      # use WATCHPACK_POLLING is needed to fix webpack watch issue on windows
+      - WATCHPACK_POLLING=true
+      - IS_DOCKER=true
+    volumes:
+      - ./workspaces/client/src:/app/workspaces/client/src
+    command: npm run dev --workspace=client
+

@@ -1,8 +1,8 @@
 import {createSdk, createWallet, toFriendlyAddress, Wallet} from "./utils/sdk";
-import {deployConfig} from "../src/deploy-config";
+import {deployConfig} from "../workspaces/server/src/deploy-config";
 import {GameFiSDK, NftContent} from "@ton-community/gamefi-sdk";
-import {FIVE_TIMES_CONTENT_TEMPLATE, FIVE_TIMES_IMAGE} from '../tokens/five-times/content-template';
-import {FIRST_TIME_CONTENT_TEMPLATE, FIRST_TIME_IMAGE} from "../tokens/first-time/content-template";
+import {FIVE_TIMES_CONTENT_TEMPLATE, FIVE_TIMES_IMAGE} from './tokens/five-times/content-template';
+import {FIRST_TIME_CONTENT_TEMPLATE, FIRST_TIME_IMAGE} from "./tokens/first-time/content-template";
 
 let SBT_CONTENT_TEMPLATE: NftContent;
 let SBT_IMAGE: Buffer;

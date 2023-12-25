@@ -1,4 +1,4 @@
-import { deployConfig } from '../src/deploy-config';
+import { deployConfig } from '../workspaces/server/src/deploy-config';
 import {createClient, createWallet, getAccountState, openWallet, Wallet, WalletContract} from './utils/sdk';
 import {TonClient4} from "@ton/ton";
 
