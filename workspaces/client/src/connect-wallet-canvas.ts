@@ -1,4 +1,4 @@
-import { ConnectTelegramWalletButton, ConnectTelegramWalletParams } from "./phaser-ton";
+import { ConnectTelegramWalletButton, ConnectTelegramWalletParams } from "../../phaser-ton";
 
 export class ConnectWalletCanvasScene extends Phaser.Scene {
     public static sceneKey = 'ConnectWalletCanvasScene';

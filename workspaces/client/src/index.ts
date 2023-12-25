@@ -1,6 +1,6 @@
 import * as Phaser from 'phaser';
 import { TonConnectUI, Wallet } from '@tonconnect/ui';
-import { restoreWalletConnection } from './phaser-ton';
+import { restoreWalletConnection } from '../../phaser-ton';
 import { UI } from './ui';
 import { ConnectWalletHtmlScene } from './connect-wallet-html';
 import { ConnectWalletCanvasScene } from './connect-wallet-canvas';
